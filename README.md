@@ -1,6 +1,7 @@
-# RSK Truffle Plant Box
+# RSK Truffle Token Box
 
-Truffle box configured to create a complete dApp using Truffle framework connected to RSK Networks, including a frontend.
+Truffle box with everything you need to start creating a token using Open Zeppelin smart contracts library in Truffle framework, connected to a RSK network.
+It includes network configurations for local node (regtest), Testnet and Mainnet.
 
 ## Requirements
 
@@ -17,24 +18,22 @@ Install Truffle globally:
 npm install -g truffle
 ```
 
-Go to the tutorial [Truffle boxes prerequisites](https://developers.rsk.co/tutorials/truffle-boxes/truffle-boxes-prerequisites/) to have all requirements steps with more details, explanations, and images.
-
 ## Installation
 
 1. Create a new folder. 
-For example, create the folder `rsk-plant`.
+For example, create the folder `rsk-token`.
 Navigate to the folder in the terminal.
 
 ```shell
-mkdir rsk-plant
-cd rsk-plant
+mkdir rsk-token
+cd rsk-token
 ```
 
 2. Run the unbox command. 
 This also takes care of installing the necessary dependencies and it can take some time.
 
 ```shell
-truffle unbox rsksmart/rsk-plant-box
+truffle unbox rsksmart/rsk-token-box
 ```
 
 This is the result using Windows OS:
@@ -54,7 +53,7 @@ truffle develop
 You will now be in the truffle develop console with seeded accounts and their associated private keys listed.
 
 ```txt
-C:\RSK\rsk-plant>truffle develop
+C:\RSK\rsk-next>truffle develop
 
 Truffle Develop started at http://127.0.0.1:8545/
 
@@ -90,17 +89,22 @@ Ensure you do not use it on production blockchains, or else you risk losing fund
 truffle(develop)>
 ```
 
-## PlantShop.sol
+## Token.sol
 
-Take a look at the smart contract `PlantShop.sol`. You can check it out in folder `contracts`.
+Take a look at the smart contract `Token.sol`. You can check it out in folder `contracts`.
 
-![PlantShop.sol](/images/image-02.png)
+![Token.sol](/images/image-19.png)
 
-This smart contract has:
+> Token.sol has only 7 code lines!
 
-* A variable `buyers` to store an array with 16 posisions to store addresses
-* A function `getBuyers` to return the list of addresses stored at variable `buyers`
-* A function `buy` to update an address at variable `buyers`, in the number of position sent as parameter
+This smart contract is a mintable [ERC20](https://eips.ethereum.org/EIPS/eip-20) token. This means that, in addition to the standard ERC20 specification, it has a function for issuing new tokens.
+
+To create our ERC20 Token, we will import `ERC20Mintable` from Open Zeppelin. 
+This library itself imports several other libraries such as `SafeMath.sol`, the standards for this kind of token, and the capability to mint tokens.
+
+Inside the token, we define some basic information about the token: `name`, `symbol`, and number of `decimals` for the precision.
+
+To inherit the library's attributes and functions, we simply define our contract as a `ERC20Mintable` using the `is` keyword in this way.
 
 5. Compile and migrate the smart contract. 
 Note inside the development console we don't preface commands with `truffle`.
@@ -113,7 +117,7 @@ compile
 
 The `compile output` should be similar to:
 
-![truffle compile](/images/image-03.png)
+![truffle compile](/images/image-02.png)
 
 ```shell
 migrate
@@ -121,12 +125,14 @@ migrate
 
 And the `migrate output` should be similar to:
 
-![truffle migrate](/images/image-04.png)
+![truffle migrate](/images/image-03.png)
 
 6. Running contract tests.
 
-This Truffle box also comes with the file `TestPlantShop.js` which include some examples for testing the smart contract. 
+This Truffle box also comes with the file `TestToken.js` which include some examples for testing the smart contract. 
 You can check it out in the `test` folder.
+
+There are many other tests which can be done to check an ERC20 token.
 
 Run this command in the development console:
 
@@ -136,7 +142,7 @@ test
 
 This `test output` should be similar to:
 
-![truffle test](/images/image-05.png)
+![truffle test](/images/image-04.png)
 
 Note the command varies slightly if you're in or outside of the development console.
 
@@ -148,3 +154,298 @@ test
 truffle test
 ```
 
+## Interact with the token using Truffle console 
+
+1. Get your accounts in Truffle console.
+
+In the Truffle console, enter:
+
+```javascript
+const accounts = await web3.eth.getAccounts()
+```
+
+Don’t worry about the `undefined` return, it is ok. See the addresses after it by entering the command below:
+
+```javascript
+accounts
+```
+
+And to view each account:
+
+```javascript
+accounts[0]
+accounts[1]
+```
+
+Take a look in the results:
+
+![accounts](/images/image-05.png)
+
+2. Interact with the token using Truffle console.
+
+First of all, connect with your token
+
+```javascript
+const token = await Token.deployed()
+```
+
+3. Confirm if our instance is OK.
+
+Enter the instance’s name:  `token`, then `.`, without space hit the TAB button twice to trigger auto-complete as seen below. 
+This will display the published address of the smart contract, and the transaction hash for its deployment, among other things, including all public variables and methods available.
+
+```javascript
+token. [TAB] [TAB]
+```
+
+![token tab tab](/images/image-06.png)
+
+4. Check the total supply
+
+To check if we have tokens already minted, call the `totalSupply` function:
+
+```javascript
+(await token.totalSupply()).toString()
+```
+
+The returned value is 0, which is expected, since we did not perform any initial mint when we deployed the token.
+
+5. Check the token balance
+
+To check the balance of an account, call the `balanceOf` function. For example, to check the balance of account 0:
+
+```javascript
+(await token.balanceOf(accounts[0])).toString()
+```
+
+Take a look in the results of total supply and balanceOf:
+
+![total supply and balanceOf 0](/images/image-09.png)
+
+The returned value is also 0, which is expected, since we did not make any initial mint when we deployed the token, and by definition no accounts can have any tokens yet.
+
+6. Mint tokens
+
+Run this command:
+
+```javascript
+token.mint(accounts[0], 10000)
+```
+
+This command sent a transaction to mint 100 tokens for account 0. 
+
+![token.mint account 0](/images/image-10.png)
+
+You can also mint to a specific address, `0xa52515946DAABe072f446Cc014a4eaA93fb9Fd79`:
+
+```javascript
+token.mint("0xa52515946DAABe072f446Cc014a4eaA93fb9Fd79", 10000)
+```
+
+![token.mint address](/images/image-11.png)
+
+7. Reconfirm the token balance
+
+Check the balance of account 0 again:
+
+```javascript
+(await token.balanceOf(accounts[0])).toString()
+```
+
+The returned value is 10000, which is 100 with 2 decimal places of precision. This is exactly what we expected, as we issued 100 tokens
+
+Also, you can get the balance of a specific address, for example, `0xa52515946DAABe072f446Cc014a4eaA93fb9Fd79`:
+
+```javascript
+(await token.balanceOf("0xa52515946DAABe072f446Cc014a4eaA93fb9Fd79")).toString()
+```
+
+Take a look in the results:
+
+![balanceOf account 0 and address with 10000](/images/image-13.png)
+
+8. Check the total supply (again)
+
+Check the total supply again:
+
+```javascript
+(await token.totalSupply()).toString()
+```
+
+![totalSupply 20000](/images/image-15.png)
+
+The returned value is 20000, which is 200 with 2 decimal places of precision. 
+After minting 100 tokens for 2 accounts, this is perfect!
+
+9. Transfer tokens
+
+To transfer 40 tokens from account 0 to account 2. 
+This can be done by calling the `transfer` function.
+
+```javascript
+token.transfer(accounts[2], 4000, {from: accounts[0]})
+```
+
+![token.transfer](/images/image-16.png)
+
+Account 2 had no tokens before the transfer, and now it should have 40. Account 1 must have 60 tokens. Also the total supply will be the same.
+
+Let’s check the balance of each account and the total supply:
+
+```javascript
+(await token.balanceOf(accounts[2])).toString()
+(await token.balanceOf(accounts[0])).toString()
+(await token.totalSupply()).toString()
+```
+
+Take a look in the results:
+
+![balances after transfer](/images/image-17.png)
+
+Great! The balances of both accounts and the total supply are correct.
+
+### Exit Truffle console
+
+In the Truffle console, enter this command to exit the terminal:
+
+```shell
+.exit
+```
+
+## Using RSK networks
+
+This Truffle box is already configured to connect to three RSK networks: regtest (local node), testnet and mainnet. We need only to do some items:
+
+- Install and run a local node
+- Setup an account & get R-BTC
+- RSK network gas price
+- Your wallet mnemonic
+- Choose the network in the app
+
+### RSK regtest (Local node)
+
+To install and run a local node, follow [these instructions](https://developers.rsk.co/quick-start/step1-install-rsk-local-node/ "Install RSK local node - RSK developers portal").
+
+### Setup an account & get R-BTC
+
+- Get an address and learn how works the [account based RSK addresses](https://developers.rsk.co/rsk/architecture/account-based/ "Account based RSK addresses - RSK Developers Portal").
+- Paste the wallet mnemonic in the file `.secret`, located in the folder project, and save it.
+- For the RSK Testnet, get tR-BTC from [our faucet](https://faucet.testnet.rsk.co/).
+- For the RSK Mainnet, get R-BTC from [an exchange](https://developers.rsk.co/rsk/rbtc/).
+
+Take a look `truffle-config.js` file to realize that we are using `HDWalletProvider` with RSK Networks derivations path:
+- RSK Testnet dpath: `m/44’/37310’/0’/0`
+- RSK Mainnet dpath: `m/44’/137’/0’/0`
+
+For more information check [RSKIP57](https://github.com/rsksmart/RSKIPs/blob/master/IPs/RSKIP57.md).
+
+### Setup the gas price
+
+**Gas** is the internal pricing for running a transaction or contract. When you send tokens, interact with a contract, send R-BTC, or do anything else on the blockchain, you must pay for that computation. That payment is calculated as gas. In RSK, this is paid in **R-BTC**.
+The **minimumGasPrice** is written in the block header by miners and establishes the minimum gas price that a transaction should have in order to be included in that block.
+
+To update the **minimumGasPrice** in our project run this query using cURL:
+
+**Testnet**
+
+```shell
+curl https://public-node.testnet.rsk.co/ -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' \
+    > .minimum-gas-price-testnet.json
+```
+
+**Mainnet**
+
+```shell
+curl https://public-node.rsk.co/ -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' \
+    > .minimum-gas-price-mainnet.json
+```
+
+This query saved the details of latest block to 
+file .minimum-gas-price-testnet.json 
+or .minimum-gas-price-mainnet.json, respectively.
+
+In the `truffle-config.js`, we are reading the parameter `minimumGasPrice` in each json file.
+
+For more information about the **Gas** and **minimumGasPrice** please go to the [gas page](https://developers.rsk.co/rsk/rbtc/gas/ "Gas - RSK Developers Portal").
+
+### Connect to RSK regtest (local node)
+
+First ensure you have a local node running.
+
+```shell
+truffle console
+```
+
+> Any network defined with the name development is considered the default network.
+
+### Connect to RSK Testnet or Mainnet
+
+Run the development console for any RSK network.
+
+```shell
+# Console for Testnet
+truffle console --network testnet
+
+# Console for Mainnet
+truffle console --network mainnet
+```
+
+### Test the connection to RSK network
+
+On any of the networks, run this commands in the Truffle console:
+
+#### Block number
+Shows the last block number.
+
+```javascript
+(await web3.eth.getBlockNumber()).toString()
+```
+#### Network ID
+
+To get the network ID, run this command:
+
+```javascript
+(await web3.eth.net.getId()).toString()
+```
+
+For the local node, the network ID is `33`.
+
+![getId local](/images/image-18.png)
+
+List of network IDs:
+- mainnet: 30
+- testnet: 31
+- regtest (local node): 33
+
+### Compile and migrate the smart contracts. 
+
+We will do it running the below commands directly in the terminal, without using the truffle console, this is to show you an alternative.
+
+On any of the networks, run this commands in a terminal (not in Truffle console):
+
+```shell
+truffle migrate
+```
+
+### Where to go from here
+
+Interact with the token published on an RSK network using Truffle console, doing the same steps which was done before:
+
+- Get your accounts
+- Connect with your token
+- Check the total supply or the token balance
+- Mint tokens
+- Transfer tokens
+
+At this point, we have installed all requirements and created a token using Truffle framework and Open Zeppelin smart contracts library,
+connected to an RSK local node (Regtest), the RSK Testnet and the RSK Mainnet.
+
+- **Find more documentation**
+
+Check out the [RSK developers portal](https://developers.rsk.co/).
+
+- **Do you have questions?**
+
+Ask in the [RSK chat](https://gitter.im/rsksmart/getting-started).

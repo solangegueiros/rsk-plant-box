@@ -1,5 +1,5 @@
-var PlantShop = artifacts.require("PlantShop");
+var Token = artifacts.require("Token");
 
 module.exports = function(deployer) {
-  deployer.deploy(PlantShop);
+  deployer.deploy(Token);
 };
