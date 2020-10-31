@@ -1,0 +1,31 @@
+{
+  "name": "rsk-plant-box",
+  "version": "1.0.0",
+  "description": "Truffle box configured to create a complete dApp using Truffle framework connected to RSK Networks, including a frontend",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solangegueiros/rsk-plant-box.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/solangegueiros/rsk-plant-box/issues"
+  },
+  "homepage": "https://github.com/solangegueiros/rsk-plant-box#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "2.5.1",
+    "@truffle/hdwallet-provider": "1.0.35"
+  },
+  "devDependencies": {
+    "lite-server": "^2.3.0"
+  }
+}
