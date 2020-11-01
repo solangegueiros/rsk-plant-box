@@ -133,7 +133,7 @@ And the `migrate output` should be similar to:
 
 ![truffle migrate](/images/image-04.png)
 
-1. Running contract tests.
+6. Testing the smart contract.
 
 This Truffle box also comes with the file `TestPlantShop.js` which include some examples for testing the smart contract. 
 You can check it out in the `test` folder.
@@ -144,7 +144,7 @@ Run this command in the development console:
 test
 ```
 
-This `test output` should be similar to:
+The `test output` should be similar to:
 
 ![truffle test](/images/image-05.png)
 
@@ -160,9 +160,9 @@ In the Truffle console, enter this command to exit the terminal:
 
 This Truffle box is already configured to connect to three RSK networks: 
 
-- regtest (local node)
-- testnet
-- mainnet
+1. regtest (local node)
+2. testnet
+3. mainnet
 
 Testnet will be used here. For other networks:
 
@@ -176,7 +176,7 @@ Follow the same instructions, just replacing `testnet` to `mainnet`.
 
 ### RSK testnet
 
-We need only to do some items:
+We need to do some tasks:
 
 - Setup an account and get R-BTC
 - Update RSK network gas price
@@ -195,7 +195,7 @@ Some options are:
 
 Select the RSK Network in the web wallet.
 - Nifty: select in the dropdown list
-- Metamask: go to [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/) to configure it in `Custom RPC`.
+- Metamask: go to [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/) to configure it in `Custom RPC`
 
 ![wallets](/images/image-06.png)
 
@@ -207,11 +207,11 @@ Take a look `truffle-config.js` file to realize that we are using `HDWalletProvi
 
 For more information check [RSKIP57](https://github.com/rsksmart/RSKIPs/blob/master/IPs/RSKIP57.md).
 
-1. Update `.secret` file
+2. Update `.secret` file
 
 After create your wallet, update your mnemonic in the file `.secret`, located in the folder project, and save it.
 
-3. In order to get some R-BTCs:
+3. Get some R-BTCs:
 - For the RSK Testnet, get tR-BTC from [our faucet](https://faucet.testnet.rsk.co/).
 
 ### Setup the gas price
@@ -277,18 +277,18 @@ Exit the Truffle console:
 
 ### Migrate the smart contract 
 
-We will do it running the below commands directly in the terminal, without using the truffle console, this is to show you an alternative.
+We will do it running the below commands directly in the terminal, without using the Truffle console, to show you this alternative.
 
 On any of the networks, run this commands in a terminal (not in Truffle console).
-To use Testnet or Mainnet, you need to define it using the parameter `-- network`:
+To use Testnet or Mainnet, you need to specify this using the parameter `-- network`:
 
 ```shell
 truffle migrate --network testnet
 ```
 
-The migrate process in a real blockchain takes some time, because Truffle create some transactions which need to be mined in the blockchain.
+The migrate process in a real blockchain takes more time, because Truffle creates some transactions which need to be mined on the blockchain.
 
-### View the contract in the Testnet explorer
+### View the deployed contract in the Testnet explorer
 
 You can copy the contract address and view it in the [Testnet explorer](https://explorer.testnet.rsk.co/).
 
@@ -305,7 +305,7 @@ If you would like to have the code source verified, do it in the tab `Code` in t
 ## The dApp
 Included with the plant-shop Truffle Box was the code for the app's front-end. That code exists within the `src` directory.
 
-> Be sure in have select the RSK testnet in the wallet.
+> Make sure you have selected the RSK testnet in the wallet.
 
 ### Running the dev server
 
@@ -318,6 +318,7 @@ npm run dev
 ```
 
 The dev server will launch and automatically open a new browser tab containing your dapp.
+
 It is running at [http://localhost:3000](http://localhost:3000)
 
 ![rsk plant garden](/images/image-11.png)
@@ -327,9 +328,9 @@ It is running at [http://localhost:3000](http://localhost:3000)
 To use the dapp, click the `Get` button on the plant of your choice.
 
 You'll be automatically prompted to approve the transaction by the web wallet. 
-Click Submit / Confirm to approve the transaction.
+Click submit / confirm to approve the transaction.
 
-You'll see the button next to the choosed plant change to show the first characters of the wallet that got the plant and become disabled, just as we specified, because the plant has now been acquired.
+After the transaction is confirmed, you'll see the button next to the choosed plant change to show the first characters of the wallet that got the plant and become disabled, just as we specified, because the plant has now been acquired.
 
 Congratulations👏👏👏! You built and ran a complete dApp on RSK network!
 
