@@ -48,6 +48,18 @@ This is the result using Windows OS:
 
 ![truffle unbox](/images/image-01.png)
 
+## PlantShop.sol
+
+Take a look at the smart contract `PlantShop.sol`. You can check it out in folder `contracts`.
+
+![PlantShop.sol](/images/image-02.png)
+
+This smart contract has:
+
+* A variable `buyers` to store an array with 16 posisions to store addresses
+* A function `getBuyers` to return the list of addresses stored at variable `buyers`
+* A function `buy` to update an address at variable `buyers`, in the number of position sent as parameter
+
 ## Development console
 
 Truffle has an interactive console that also spawns a development blockchain. This is very useful for compiling, deploying and testing locally.
@@ -97,20 +109,9 @@ Ensure you do not use it on production blockchains, or else you risk losing fund
 truffle(develop)>
 ```
 
-## PlantShop.sol
+> Inside the development console we don't preface commands with `truffle`.
 
-Take a look at the smart contract `PlantShop.sol`. You can check it out in folder `contracts`.
-
-![PlantShop.sol](/images/image-02.png)
-
-This smart contract has:
-
-* A variable `buyers` to store an array with 16 posisions to store addresses
-* A function `getBuyers` to return the list of addresses stored at variable `buyers`
-* A function `buy` to update an address at variable `buyers`, in the number of position sent as parameter
-
-5. Compile and migrate the smart contract. 
-Note inside the development console we don't preface commands with `truffle`.
+4. Compile the smart contract. 
 
 > To make sure you're in the development console, the command prompt must be `truffle(develop)>`
 
@@ -122,6 +123,8 @@ The `compile output` should be similar to:
 
 ![truffle compile](/images/image-03.png)
 
+5. Deploy (migrate) the smart contract. 
+
 ```shell
 migrate
 ```
@@ -130,7 +133,7 @@ And the `migrate output` should be similar to:
 
 ![truffle migrate](/images/image-04.png)
 
-6. Running contract tests.
+1. Running contract tests.
 
 This Truffle box also comes with the file `TestPlantShop.js` which include some examples for testing the smart contract. 
 You can check it out in the `test` folder.
@@ -155,17 +158,31 @@ In the Truffle console, enter this command to exit the terminal:
 
 ## Using RSK networks
 
-This Truffle box is already configured to connect to three RSK networks: regtest (local node), testnet and mainnet. We need only to do some items:
+This Truffle box is already configured to connect to three RSK networks: 
 
-- Install and run a local node
+- regtest (local node)
+- testnet
+- mainnet
+
+Testnet will be used here. For other networks:
+
+**RSK regtest (Local node)**
+
+To use the Truffle box connected to a local node, go to the tutorial [how to use Truffle connected to a local node](https://developers.rsk.co/tutorials/ethereum-devs/truffle-regtest/)
+
+**RSK mainnet**
+
+Follow the same instructions, just replacing `testnet` to `mainnet`.
+
+### RSK testnet
+
+We need only to do some items:
+
 - Setup an account and get R-BTC
 - Update RSK network gas price
 - Connect to an RSK network
 - Deploy in the network of your choose
 
-### RSK regtest (Local node)
-
-To install and run a local node, follow [these instructions](https://developers.rsk.co/quick-start/step1-install-rsk-local-node/ "Install RSK local node - RSK developers portal").
 
 ### Setup an account & get R-BTC
 
@@ -178,7 +195,9 @@ Some options are:
 
 Select the RSK Network in the web wallet.
 - Nifty: select in the dropdown list
-- Metamask: configure [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/)
+- Metamask: go to [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/) to configure it in `Custom RPC`.
+
+![wallets](/images/image-06.png)
 
 You can learn more about [account based RSK addresses](https://developers.rsk.co/rsk/architecture/account-based/ "Account based RSK addresses - RSK Developers Portal").
 
@@ -188,72 +207,41 @@ Take a look `truffle-config.js` file to realize that we are using `HDWalletProvi
 
 For more information check [RSKIP57](https://github.com/rsksmart/RSKIPs/blob/master/IPs/RSKIP57.md).
 
-2. Update `.secret` file
+1. Update `.secret` file
 
 After create your wallet, update your mnemonic in the file `.secret`, located in the folder project, and save it.
 
 3. In order to get some R-BTCs:
 - For the RSK Testnet, get tR-BTC from [our faucet](https://faucet.testnet.rsk.co/).
-- For the RSK Mainnet, get R-BTC from [an exchange](https://developers.rsk.co/rsk/rbtc/).
 
 ### Setup the gas price
 
 **Gas** is the internal pricing for running a transaction or contract. When you send tokens, interact with a contract, send R-BTC, or do anything else on the blockchain, you must pay for that computation. That payment is calculated as gas. In RSK, this is paid in **R-BTC**.
 The **minimumGasPrice** is written in the block header by miners and establishes the minimum gas price that a transaction should have in order to be included in that block.
 
-To update the **minimumGasPrice** in our project run this query using cURL:
-
-**Testnet**
+To update the Testnet **minimumGasPrice** in our project run this query using cURL:
 
 ```shell
-curl https://public-node.testnet.rsk.co/ -X POST -H "Content-Type: application/json" \
-    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' \
-    > .minimum-gas-price-testnet.json
+curl https://public-node.testnet.rsk.co/ -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' > .minimum-gas-price-testnet.json
 ```
 
-**Mainnet**
+This query saved the details of latest block to file .minimum-gas-price-testnet.json 
 
-```shell
-curl https://public-node.rsk.co/ -X POST -H "Content-Type: application/json" \
-    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' \
-    > .minimum-gas-price-mainnet.json
-```
-
-This query saved the details of latest block to 
-file .minimum-gas-price-testnet.json 
-or .minimum-gas-price-mainnet.json, respectively.
-
-In the `truffle-config.js`, we are reading the parameter `minimumGasPrice` in each json file.
+In the `truffle-config.js`, we are reading the parameter `minimumGasPrice` from this json file.
 
 For more information about the **Gas** and **minimumGasPrice** please go to the [gas page](https://developers.rsk.co/rsk/rbtc/gas/ "Gas - RSK Developers Portal").
 
-### Connect to an RSK network
-
-**regtest (local node)**
-
-First ensure you have a local node running.
-
-```shell
-truffle console
-```
-
-> Any network defined with the name development is considered the default network.
-
-**RSK Testnet or Mainnet**
+### Connect to RSK Testnet
 
 Run the development console for any RSK network.
 
 ```shell
-# Console for Testnet
 truffle console --network testnet
-
-# Console for Mainnet
-truffle console --network mainnet
 ```
 
 ### Test the connection to RSK network
 
-On any of the networks, run this commands in the Truffle console:
+Run this commands in the Truffle console:
 
 **Block number**
 
@@ -275,36 +263,49 @@ List of network IDs:
 - testnet: 31
 - regtest (local node): 33
 
-### Compile and migrate the smart contracts 
+Check it out the last steps in this image:
+
+![connect to rsk network](/images/image-07.png)
+
+You can verify that I get the last block twice, and the block number inscreased, so we conclude that the connection is ok.
+
+Exit the Truffle console:
+
+```shell
+.exit
+```
+
+### Migrate the smart contract 
 
 We will do it running the below commands directly in the terminal, without using the truffle console, this is to show you an alternative.
 
 On any of the networks, run this commands in a terminal (not in Truffle console).
-If you would like to use Testnet or Mainnet, you need to define it using the parameter `-- network`:
+To use Testnet or Mainnet, you need to define it using the parameter `-- network`:
 
 ```shell
-# Migrate in local node
-truffle migrate
-
-# Migrate in Testnet
 truffle migrate --network testnet
-
-# Migrate in Mainnet
-truffle migrate --network mainnet
 ```
 
 The migrate process in a real blockchain takes some time, because Truffle create some transactions which need to be mined in the blockchain.
 
+### View the contract in the Testnet explorer
+
+You can copy the contract address and view it in the [Testnet explorer](https://explorer.testnet.rsk.co/).
+
+![deploy contract address](/images/image-08.png)
+
+For example, [0x3A6Dd83F76eCceA654bDc4ea29170B8A34A9e270](https://explorer.testnet.rsk.co/address/0x3a6dd83f76eccea654bdc4ea29170b8a34a9e270) is the contract address for my last deploy.
+
+![explorer contract address](/images/image-09.png)
+
+If you would like to have the code source verified, do it in the tab `Code` in the explorer.
+
+![contract code verified on explorer](/images/image-10.png)
+
 ## The dApp
 Included with the plant-shop Truffle Box was the code for the app's front-end. That code exists within the `src` directory.
 
-### Select the network
-
-To interacting with the dapp in a browser, the easy way is using a web3 wallet injected in the browser.  
-
-Select the same network which you ran the migrate command: 
-- Nifty: select in the dropdown list
-- Metamask: configure [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/)
+> Be sure in have select the RSK testnet in the wallet.
 
 ### Running the dev server
 
@@ -319,6 +320,8 @@ npm run dev
 The dev server will launch and automatically open a new browser tab containing your dapp.
 It is running at [http://localhost:3000](http://localhost:3000)
 
+![rsk plant garden](/images/image-11.png)
+
 ### Getting plants
 
 To use the dapp, click the `Get` button on the plant of your choice.
@@ -326,8 +329,7 @@ To use the dapp, click the `Get` button on the plant of your choice.
 You'll be automatically prompted to approve the transaction by the web wallet. 
 Click Submit / Confirm to approve the transaction.
 
-You'll see the button next to the choosed plant change to say "Success" and become disabled, 
-just as we specified, because the plant has now been acquired.
+You'll see the button next to the choosed plant change to show the first characters of the wallet that got the plant and become disabled, just as we specified, because the plant has now been acquired.
 
 Congratulations👏👏👏! You built and ran a complete dApp on RSK network!
 
