@@ -8,21 +8,20 @@
   },
   "scripts": {
     "dev": "lite-server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "truffle test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/solangegueiros/rsk-plant-box.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["blockchain", "smart contracts", "ethereum", "truffle", "truffle box", "rsk", "rsksmart"],
+  "author": "Solange Gueiros <solangegueiros@gmail.com> (https://solange.dev)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/solangegueiros/rsk-plant-box/issues"
   },
   "homepage": "https://github.com/solangegueiros/rsk-plant-box#readme",
   "dependencies": {
-    "@openzeppelin/contracts": "2.5.1",
     "@truffle/hdwallet-provider": "1.0.35"
   },
   "devDependencies": {

@@ -1,25 +1,32 @@
 # RSK Truffle Plant Box
 
-Truffle box configured to create a complete dApp using Truffle framework connected to RSK Networks, including a frontend.
+Truffle box configured to create a complete dApp using Truffle framework connected to RSK Networks, including a user interface to interact with the smart contract.
+
+It was inspired by [Truffle pet shop box](https://www.trufflesuite.com/boxes/pet-shop).
 
 ## Requirements
 
-1. [NPM (Node Package Manager)](https://nodejs.org/en/) and 
-Node.js are needed, though both are usually installed at once.
+There are a few technical requirements before we start. 
+To use `Truffle boxes`, you need to have installed in your computer:
 
-Go to [Node.js](https://nodejs.org/en/) if you need to install it.
+- Git
+- a POSIX compliant shell
+- cURL
+- Node.js and NPM
+- a code editor
 
-2. Truffle
+If you don't have any of them installed, go to the tutorial [Truffle boxes prerequisites](https://developers.rsk.co/tutorials/truffle-boxes/truffle-boxes-prerequisites/) which have all the instructions to setup these requirements.
 
-Install Truffle globally:
+**Truffle framework**
+
+Once you have those requirements installed, you only need one command to install `Truffle`.
+It is better to do it globally:
 
 ```shell
 npm install -g truffle
 ```
 
-Go to the tutorial [Truffle boxes prerequisites](https://developers.rsk.co/tutorials/truffle-boxes/truffle-boxes-prerequisites/) to have all requirements steps with more details, explanations, and images.
-
-## Installation
+## Installing the Truffle box
 
 1. Create a new folder. 
 For example, create the folder `rsk-plant`.
@@ -138,13 +145,207 @@ This `test output` should be similar to:
 
 ![truffle test](/images/image-05.png)
 
-Note the command varies slightly if you're in or outside of the development console.
+### Exit Truffle console
+
+In the Truffle console, enter this command to exit the terminal:
+
+```shell
+.exit
+```
+
+## Using RSK networks
+
+This Truffle box is already configured to connect to three RSK networks: regtest (local node), testnet and mainnet. We need only to do some items:
+
+- Install and run a local node
+- Setup an account and get R-BTC
+- Update RSK network gas price
+- Connect to an RSK network
+- Deploy in the network of your choose
+
+### RSK regtest (Local node)
+
+To install and run a local node, follow [these instructions](https://developers.rsk.co/quick-start/step1-install-rsk-local-node/ "Install RSK local node - RSK developers portal").
+
+### Setup an account & get R-BTC
+
+1. Create a wallet
+
+The easy way to setup an account is using a web3 wallet injected in the browser.
+Some options are:
+- [Metamask](https://metamask.io/)
+- [Nifty](https://www.poa.network/for-users/nifty-wallet)
+
+Select the RSK Network in the web wallet.
+- Nifty: select in the dropdown list
+- Metamask: configure [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/)
+
+You can learn more about [account based RSK addresses](https://developers.rsk.co/rsk/architecture/account-based/ "Account based RSK addresses - RSK Developers Portal").
+
+Take a look `truffle-config.js` file to realize that we are using `HDWalletProvider` with RSK Networks derivations path:
+- RSK Testnet dpath: `m/44’/37310’/0’/0`
+- RSK Mainnet dpath: `m/44’/137’/0’/0`
+
+For more information check [RSKIP57](https://github.com/rsksmart/RSKIPs/blob/master/IPs/RSKIP57.md).
+
+2. Update `.secret` file
+
+After create your wallet, update your mnemonic in the file `.secret`, located in the folder project, and save it.
+
+3. In order to get some R-BTCs:
+- For the RSK Testnet, get tR-BTC from [our faucet](https://faucet.testnet.rsk.co/).
+- For the RSK Mainnet, get R-BTC from [an exchange](https://developers.rsk.co/rsk/rbtc/).
+
+### Setup the gas price
+
+**Gas** is the internal pricing for running a transaction or contract. When you send tokens, interact with a contract, send R-BTC, or do anything else on the blockchain, you must pay for that computation. That payment is calculated as gas. In RSK, this is paid in **R-BTC**.
+The **minimumGasPrice** is written in the block header by miners and establishes the minimum gas price that a transaction should have in order to be included in that block.
+
+To update the **minimumGasPrice** in our project run this query using cURL:
+
+**Testnet**
+
+```shell
+curl https://public-node.testnet.rsk.co/ -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' \
+    > .minimum-gas-price-testnet.json
+```
+
+**Mainnet**
+
+```shell
+curl https://public-node.rsk.co/ -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",false],"id":1}' \
+    > .minimum-gas-price-mainnet.json
+```
+
+This query saved the details of latest block to 
+file .minimum-gas-price-testnet.json 
+or .minimum-gas-price-mainnet.json, respectively.
+
+In the `truffle-config.js`, we are reading the parameter `minimumGasPrice` in each json file.
+
+For more information about the **Gas** and **minimumGasPrice** please go to the [gas page](https://developers.rsk.co/rsk/rbtc/gas/ "Gas - RSK Developers Portal").
+
+### Connect to an RSK network
+
+**regtest (local node)**
+
+First ensure you have a local node running.
+
+```shell
+truffle console
+```
+
+> Any network defined with the name development is considered the default network.
+
+**RSK Testnet or Mainnet**
+
+Run the development console for any RSK network.
+
+```shell
+# Console for Testnet
+truffle console --network testnet
+
+# Console for Mainnet
+truffle console --network mainnet
+```
+
+### Test the connection to RSK network
+
+On any of the networks, run this commands in the Truffle console:
+
+**Block number**
+
+Shows the last block number.
 
 ```javascript
-// inside the development console.
-test
-
-// outside the development console.
-truffle test
+(await web3.eth.getBlockNumber()).toString()
 ```
+**Network ID**
+
+To get the network ID, run this command:
+
+```javascript
+(await web3.eth.net.getId()).toString()
+```
+
+List of network IDs:
+- mainnet: 30
+- testnet: 31
+- regtest (local node): 33
+
+### Compile and migrate the smart contracts 
+
+We will do it running the below commands directly in the terminal, without using the truffle console, this is to show you an alternative.
+
+On any of the networks, run this commands in a terminal (not in Truffle console).
+If you would like to use Testnet or Mainnet, you need to define it using the parameter `-- network`:
+
+```shell
+# Migrate in local node
+truffle migrate
+
+# Migrate in Testnet
+truffle migrate --network testnet
+
+# Migrate in Mainnet
+truffle migrate --network mainnet
+```
+
+The migrate process in a real blockchain takes some time, because Truffle create some transactions which need to be mined in the blockchain.
+
+## The dApp
+Included with the plant-shop Truffle Box was the code for the app's front-end. That code exists within the `src` directory.
+
+### Select the network
+
+To interacting with the dapp in a browser, the easy way is using a web3 wallet injected in the browser.  
+
+Select the same network which you ran the migrate command: 
+- Nifty: select in the dropdown list
+- Metamask: configure [RSK Testnet](https://developers.rsk.co/wallet/use/metamask/)
+
+### Running the dev server
+
+Now we're ready to use our dapp!
+
+Start the local web server:
+
+```shell
+npm run dev
+```
+
+The dev server will launch and automatically open a new browser tab containing your dapp.
+It is running at [http://localhost:3000](http://localhost:3000)
+
+### Getting plants
+
+To use the dapp, click the `Get` button on the plant of your choice.
+
+You'll be automatically prompted to approve the transaction by the web wallet. 
+Click Submit / Confirm to approve the transaction.
+
+You'll see the button next to the choosed plant change to say "Success" and become disabled, 
+just as we specified, because the plant has now been acquired.
+
+Congratulations👏👏👏! You built and ran a complete dApp on RSK network!
+
+### Where to go from here
+
+- **Go to tutorial**
+
+In the tutorial [using rsk-plant-box](https://developers.rsk.co/tutorials/truffle-boxes/rsk-plant-box/) we covered all the steps with more details, explanations, and images.
+
+- **Check it out more RSK Truffle boxes**
+
+Go to [RSK Truffle boxes](https://developers.rsk.co/tools/truffle/boxes/) to know and experience other boxes.
+
+- **Find more documentation**
+
+Check out the [RSK developers portal](https://developers.rsk.co/).
+
+- **Do you have questions?**
+
+Ask in the [RSK chat](https://gitter.im/rsksmart/getting-started).
 
