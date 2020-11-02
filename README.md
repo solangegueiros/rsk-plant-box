@@ -1,6 +1,8 @@
 # RSK Truffle Plant Box
 
-Truffle box configured to create a complete dApp using Truffle framework connected to RSK Networks, including a user interface to interact with the smart contract.
+Truffle box is configured to create a complete dApp using Truffle framework on [RSK Blockchain](https://developers.rsk.co/rsk/), including a user interface to interact with the smart contract.
+
+[RSK](https://www.rsk.co/) is an open source platform for Ethereum compatible smart contracts based on the Bitcoin network.
 
 It was inspired by [Truffle pet shop box](https://www.trufflesuite.com/boxes/pet-shop).
 
@@ -303,6 +305,7 @@ If you would like to have the code source verified, do it in the tab `Code` in t
 ![contract code verified on explorer](/images/image-10.png)
 
 ## The dApp
+
 Included with the plant-shop Truffle Box was the code for the app's front-end. That code exists within the `src` directory.
 
 > Make sure you have selected the RSK testnet in the wallet.
@@ -323,9 +326,11 @@ It is running at [http://localhost:3000](http://localhost:3000)
 
 ![rsk plant garden](/images/image-11.png)
 
-### Getting plants
+### Buying plants
 
-To use the dapp, click the `Get` button on the plant of your choice.
+In our garden store, don't worry about the prices, the plants are free!
+
+Click the `Get` button on the plant of your choice.
 
 You'll be automatically prompted to approve the transaction by the web wallet. 
 Click submit / confirm to approve the transaction.

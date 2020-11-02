@@ -70,6 +70,29 @@
     "name": "Sweetheart",
     "picture": "images/sweetheart.jpg",    
     "description": "Sweetheart Plant is a fast-growing climber and one of the most popular foliage plants for growing in a room."    
-  }  
-  
+  },  
+  {
+    "id": 12,
+    "name": "Orchid 2",
+    "picture": "images/orchid.jpg",
+    "description": "The Orchidaceae are a diverse and widespread family of flowering plants, with blooms that are often colourful and fragrant."    
+  },
+  {
+    "id": 13,
+    "name": "Guarana 2",
+    "picture": "images/guarana.jpg",
+    "description": "Guarana is a climbing plant, native to the Amazon basin and especially common in Brazil. Guarana is best known for the seeds from its fruit."    
+  },
+  {
+    "id": 14,
+    "name": "Bamboo 2",
+    "picture": "images/bamboo.jpg",
+    "description": "The bamboos are evergreen perennial flowering plants in the subfamily Bambusoideae of the grass family Poaceae."    
+  },
+  {
+    "id": 15,
+    "name": "Paubrasilia 2",
+    "picture": "images/paubrasilia.jpg",
+    "description": "Paubrasilia echinata is the national tree of Brazil. This plant has a dense, orange-red heartwood that takes a high shine, and it is the premier wood used for making bows for stringed instruments."    
+  }
  ]
