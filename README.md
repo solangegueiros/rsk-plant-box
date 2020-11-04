@@ -4,7 +4,8 @@ Truffle box is configured to create a complete dApp using Truffle framework on [
 
 [RSK](https://www.rsk.co/) is an open source platform for Ethereum compatible smart contracts based on the Bitcoin network.
 
-It was inspired by [Truffle pet shop box](https://www.trufflesuite.com/boxes/pet-shop).
+It was inspired by [Truffle pet shop box](https://www.trufflesuite.com/boxes/pet-shop). 
+Thanks, Truffle team :)
 
 ## Requirements
 
@@ -290,20 +291,6 @@ truffle migrate --network testnet
 
 The migrate process in a real blockchain takes more time, because Truffle creates some transactions which need to be mined on the blockchain.
 
-### View the deployed contract in the Testnet explorer
-
-You can copy the contract address and view it in the [Testnet explorer](https://explorer.testnet.rsk.co/).
-
-![deploy contract address](/images/image-08.png)
-
-For example, [0x3A6Dd83F76eCceA654bDc4ea29170B8A34A9e270](https://explorer.testnet.rsk.co/address/0x3a6dd83f76eccea654bdc4ea29170b8a34a9e270) is the contract address for my last deploy.
-
-![explorer contract address](/images/image-09.png)
-
-If you would like to have the code source verified, do it in the tab `Code` in the explorer.
-
-![contract code verified on explorer](/images/image-10.png)
-
 ## The dApp
 
 Included with the plant-shop Truffle Box was the code for the app's front-end. That code exists within the `src` directory.
@@ -345,7 +332,7 @@ Congratulations👏👏👏! You built and ran a complete dApp on RSK network!
 
 In the tutorial [using rsk-plant-box](https://developers.rsk.co/tutorials/truffle-boxes/rsk-plant-box/) we covered all the steps with more details, explanations, and images.
 
-- **Check it out more RSK Truffle boxes**
+- **Check it out other RSK Truffle boxes**
 
 Go to [RSK Truffle boxes](https://developers.rsk.co/tools/truffle/boxes/) to know and experience other boxes.
 
